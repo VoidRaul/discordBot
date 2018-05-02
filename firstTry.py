@@ -1,4 +1,6 @@
 import discord
+import asyncio
+from discord.ext.commands import Bot
 
 TOKEN = 'NDQxMzQ4MDk1NTU3NjMyMDAw.Dcu98g.09SoVd-Ln67DAYVFkwixBcBIXYE'
 admin ='185020327133184000'
@@ -11,6 +13,7 @@ client = discord.Client()
 @client.event
 async def on_message(message):
     if message.channel.id == channel_id_allenamento or message.channel.id == channel_id_evento :
+
         # we do not want the bot to reply to itself
         if message.author == client.user:
             return
@@ -20,8 +23,11 @@ async def on_message(message):
                 list=message.content.split()
                 print(list[1])
                 msg = list[1].format(message)
+                async for message in client.logs_from(message.channel, limit=500):
+                    await client.delete_message(message)
                 await client.send_message(message.channel, msg)
-                await client.delete_message(message)
+
+
 
 @client.event
 async def on_ready():
