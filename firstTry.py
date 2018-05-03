@@ -20,9 +20,11 @@ async def on_message(message):
         #check authority to post event
         if message.author.id == admin :
             if message.content.startswith('!create'):
-                list=message.content.split()
+                list=message.content.split('"')
                 print(list[1])
+                print(list[3])
                 msg = list[1].format(message)
+                msg=msg+"\n"+list[3].format(message)
                 async for message in client.logs_from(message.channel, limit=500):
                     await client.delete_message(message)
                 await client.send_message(message.channel, msg)
