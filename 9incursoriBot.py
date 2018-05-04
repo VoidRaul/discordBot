@@ -1,14 +1,13 @@
 import discord
 import asyncio
 from discord.ext.commands import Bot
-
-
+from data import*
 
 client = discord.Client()
 #listenfor client new message
 @client.event
 async def on_message(message):
-    if message.channel.id == channel_id_allenamento :
+    if message.channel.id == channel_id_ascolto1 :
         # we do not want the bot to reply to itself
         if message.author == client.user:
             return
@@ -23,12 +22,12 @@ async def on_message(message):
                     await client.delete_message(messages)
                 embed = discord.Embed(title=list[1]+" "+list[2], description=list[3], color=color_n)
                 embed.add_field(name=presenze,value=0,inline=False)
-                embed.add_field(name="Operatori", value="===========================================", inline=False)
+                embed.add_field(name=operator, value="===========================================", inline=False)
                 await client.send_message(message.channel, embed=embed)
         else:
             await client.delete_message(message)
 
-    if message.channel.id == channel_id_evento :
+    if message.channel.id == channel_id_ascolto2 :
         if message.content.startswith('!create'):
             #do something
             await client.delete_message(message)
@@ -41,7 +40,8 @@ async def on_message(message):
 @client.event
 async def on_reaction_add(reaction,user):
     #print(reaction.emoji)
-    if (reaction.message.channel.id == channel_id_allenamento or reaction.message.channel.id == channel_id_evento) and reaction.emoji=='👌':
+    #emoti is the emoji value to change the triggering emoji just change the value of emoji
+    if (reaction.message.channel.id == channel_id_ascolto1 or reaction.message.channel.id == channel_id_ascolto2) and reaction.emoji==emoti:
         for embeds in reaction.message.embeds:
             # print(embeds)
             embed = discord.Embed(title=embeds['title'], description=embeds['description'], color=color_n)
@@ -57,7 +57,8 @@ async def on_reaction_add(reaction,user):
 #listen for message reaction remove
 @client.event
 async def on_reaction_remove(reaction,user):
-    if (reaction.message.channel.id == channel_id_allenamento or reaction.message.channel.id == channel_id_evento) and reaction.emoji=='👌':
+    #emoti is the emoji value to change the triggering emoji just change the value of emoji
+    if (reaction.message.channel.id == channel_id_ascolto1 or reaction.message.channel.id == channel_id_ascolto2) and reaction.emoji==emoti:
         # print(reaction.emoji)
         for embeds in reaction.message.embeds:
             # print(embeds)
